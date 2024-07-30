@@ -1,0 +1,311 @@
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+<title>Google Maps - gmplot</title>
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8HpKyCbLR5IHcdG_NtjbBcCoapwAN9ME&callback=console.debug&libraries=maps,marker&v=beta"></script>
+<script src="https://apis.google.com/js/api.js"></script>
+<script type="text/javascript">
+    var map;
+    var polylineOptions = {
+        clickable: false,
+        geodesic: true,
+        strokeColor: "#6495ED", 
+        strokeOpacity: 1.000000,
+        strokeWeight: 2
+    };
+
+    function initialize() {
+        var dates = '{{dates}}';
+        var latitudes = '{{latitudes}}';
+        var longitudes = '{{longitudes}}';
+        var path = []
+        dates = dates.replace(/&#39;/g, "").slice(1, -1);
+        dates = dates.split(", ").map(Number);
+
+        latitudes = latitudes.slice(1, -1);
+        latitudes = latitudes.split(', ').map(Number);
+        longitudes = longitudes.slice(1, -1);
+        longitudes = longitudes.split(', ').map(Number);
+        
+        var newCenter = new google.maps.LatLng(latitudes[0], longitudes[0]);
+
+        map = new google.maps.Map(document.getElementById("map_canvas"), {
+            zoom: 20,
+            center: newCenter
+        });
+
+        for (var i = 0; i < latitudes.length; i++) {
+            var latLng = new google.maps.LatLng(latitudes[i], longitudes[i]);
+            path.push(latLng);
+        }
+        
+        new google.maps.Polyline({
+            clickable: false,
+            geodesic: true,
+            //strokeColor: "#6495ED",
+            //strokeOpacity: 1.000000,
+            //strokeWeight: 2,
+            map: map,
+            path: path 
+        });
+        var nomal = '{{stduniquedate}}';
+        nomal = nomal.replace(/&#39;/g, "").slice(1, -1);
+        nomal = nomal.split(", ");
+        
+        var selected_value = parseInt('{{selectedvalue}}');
+
+        var selectElement = document.getElementById('select_data');
+        var uniqueDates = Array.from(new Set(dates));
+
+        // var selected_value = parseInt('{{selectedvalue}}');
+        // var selectElement = document.getElementById('select_data');
+        // var uniqueDates = Array.from(new Set(dates));
+        for (var i = 0; i < uniqueDates.length; i++) {
+            var option = document.createElement('option');
+            
+            option.value = uniqueDates[i];
+            option.textContent = nomal[i];
+            
+            if (uniqueDates[i] === selected_value) {
+                option.selected = true;
+                console.log(selected_value)
+            }
+            selectElement.appendChild(option);
+        }
+
+        // for (var i = 0; i < uniqueDates.length; i++) {
+        //     var option = document.createElement('option');
+        //     option.value = uniqueDates[i];
+        //     option.textContent = uniqueDates[i];
+        //     if (uniqueDates[i] === selected_value) {
+        //         option.selected = true;
+        //         console.log(selected_value)
+        //     }
+        //     selectElement.appendChild(option);
+        
+        var today = new Date();
+        var year = today.getFullYear();
+        var month = today.getMonth() + 1;        
+        var day = today.getDate();
+
+        var formattedDate = year.toString().substr(2) + month + day;
+
+        if (formattedDate == selected_value){
+            console.log("get real time date.")
+            setInterval(updateMapData, 5000);
+        }
+
+        // if (uniqueDates[uniqueDates.length-1] == selected_value){
+        //     console.log("最新的date");
+        //     setInterval(updateMapData, 5000);
+        // }
+        // }
+
+    }
+
+    function updateMapData() {
+        // use Ajax to send request to server, get new positional data
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/get_new_data', true);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // parse new data
+                var newData = JSON.parse(xhr.responseText);
+
+                updateMapWithNewData(newData);
+            }
+        };
+
+        xhr.send();
+    }
+
+    function updateMapWithNewData(newData) {
+        console.log(newData)
+        //map = new google.maps.Map(document.getElementById("map_canvas"));
+
+        // remove old tracks...
+        var previousPolyline = map.data.getFeatureById('polyline');
+        if (previousPolyline) {
+            map.data.remove(previousPolyline);
+        }
+
+        // add new tracks...
+        var newPath = [];
+        for (var i = 0; i < newData.latitudes.length; i++) {
+            var latLng = new google.maps.LatLng(newData.latitudes[i], newData.longitudes[i]);
+            newPath.push(latLng);
+        }
+
+        map.data.addGeoJson({
+            type: 'Feature',
+            id: 'polyline',
+            geometry: {
+                type: 'LineString',
+                coordinates: newPath.map(function (latLng) {
+                    return [latLng.lng(), latLng.lat()];
+                })
+            },
+            properties: {}
+        });
+
+    }
+    </script>
+</script>
+<style>
+    body {
+            font-family: 'Lobster', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #feddf1;
+        }
+
+        header {
+            background-color: #3d2d9e;
+            background: url('/static/25.png') no-repeat center center;
+            font-size: 22px;
+            color: white;
+            padding: 1px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #3d2d9e;
+            font-size: 18px;
+        }
+
+        main {
+            padding: 15px;
+        }
+
+        footer {
+            position: fixed; /* Fixed position */
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            font-family: 'Lobster', cursive;
+            background-color: #665ca8;
+            color: #fcc3e5;
+            font-size: 18px;
+            text-align: center;
+            padding: 1px 5px;
+        }
+
+        /* 新加的 */
+        #select_data {
+            padding: 10px;
+            border: 2px solid #3d2d9e;
+            background-color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #3d2d9e;
+            outline: none;
+            margin-left: 10px;
+        }
+
+        #select_data:hover {
+            border-color: #6495ED;
+        }
+
+        /* Style for the submit button */
+        #submit_button {
+            background-color: #cac3ef;
+            color: #3d2d9e;
+            font-family: 'Lobster', cursive;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+            padding-top: 12px; /* Increases top padding */
+            padding-bottom: 12px; /* Increases bottom padding */
+        }
+
+        #submit_button:hover {
+            background-color: #d3ceef;
+        }
+
+        /* Style for the disabled option */
+        #select_data option[disabled] {
+            color: grey; /* Grey color for the placeholder text */
+        }
+
+        #selector-container label {
+            margin-right: 1px; /* Space between label and dropdown */
+            margin-left: 55px;
+            font-size: larger;
+            color: #3d2d9e;
+
+        }
+
+        /* Fade in animation */
+        @keyframes fadeIn {
+        from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Apply the animation to your main content */
+        main {
+            animation: fadeIn 1s ease-in-out;
+        }
+</style>
+</head>
+<body style="margin:0px; padding:0px;" onload="initialize()">
+    <header>
+        <h1>Route</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="helmet.html">Home</a></li>
+            <li><a href="video.html">Video</a></li>
+            <li><a href="collision.html">Collision Detection</a></li>
+            <li><a href="story.html">Our Story</a></li>
+            <li><a href="about.html">About Us</a></li>
+        </ul>
+
+        <div id="selector-container">
+            <label for="select_data">Date:</label>
+            <select name="GPSData" id="select_data" aria-label="Choose a Date:">
+                <option value="" disabled selected>Choose a date</option>
+            </select> 
+            <input id="submit_button" type="button" value="Go"> 
+        </div>
+
+    </nav>
+    
+    <main>
+    <div id="map_canvas" style="width: 95%; height: 69%; margin: auto;" />
+    </main>
+    <script>
+        document.getElementById('submit_button').addEventListener('click', function() {
+            var selectElement = document.getElementById('select_data');
+            var selectedValue = selectElement.value;
+
+            // 构建新的URL，将选定的值作为查询参数传递
+            var newURL = '/route.html?selected=' + selectedValue;
+
+            // 使用JavaScript进行页面重定向
+            window.location.href = newURL;
+        });
+
+    </script>
+    <footer>
+        <p>&copy; 2023 Helmet World. All rights reserved.</p>
+    </footer>
+</body>
+</html>

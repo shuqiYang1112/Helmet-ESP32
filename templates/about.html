@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <title>Route</title>
+    <style>
+        body {
+            font-family: 'Lobster', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #feddf1;
+        }
+
+        header {
+            background-color: #3d2d9e;
+            background: url('/static/25.png') no-repeat center center;
+            font-size: 22px;
+            color: white;
+            padding: 1px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #3d2d9e;
+            font-size: 18px;
+        }
+
+        main {
+            padding: 15px;
+        }
+
+        footer {
+            position: fixed; /* Fixed position */
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            font-family: 'Lobster', cursive;
+            background-color: #665ca8;
+            color: #fcc3e5;
+            font-size: 18px;
+            text-align: center;
+            padding: 1px 5px;
+        }
+
+        /* Fade in animation */
+        @keyframes fadeIn {
+        from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Apply the animation to your main content */
+        main {
+            animation: fadeIn 1s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>About Us</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="helmet.html">Home</a></li>
+            <li><a href="route.html">Route</a></li>
+            <li><a href="video.html">Video</a></li>
+            <li><a href="collision.html">Collision Detection</a></li>
+            <li><a href="story.html">Our Story</a></li>
+        </ul>
+    </nav>
+    <main>
+        <!-- Content will go here -->
+        <input id="submit_button" type="button" value="Submit"> 
+    </main>
+
+   
+    </script>
+
+    <footer>
+        <p>&copy; 2023 Helmet World. All rights reserved.</p>
+    </footer>
+</body>
+</html>

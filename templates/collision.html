@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <title>Route</title>
+    <style>
+        body {
+            font-family: 'Lobster', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #feddf1;
+        }
+
+        header {
+            background-color: #3d2d9e;
+            background: url('/static/25.png') no-repeat center center;
+            font-size: 22px;
+            color: white;
+            padding: 1px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #3d2d9e;
+            font-size: 18px;
+        }
+
+        main {
+            padding: 15px;
+        }
+
+        footer {
+            position: fixed; /* Fixed position */
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            font-family: 'Lobster', cursive;
+            background-color: #665ca8;
+            color: #fcc3e5;
+            font-size: 18px;
+            text-align: center;
+            padding: 1px 5px;
+        }
+
+        .bg-image {
+            background-image: url('E-1119400-B20AE3D3XZ.jpg');
+            filter: blur(1px);
+            -webkit-filter: blur(1px);
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .content {
+            background-color: rgba(255, 255, 255, 0.3);
+            color: black;
+            font-weight: bold;
+            border: 0.5px solid #f1f1f1;
+            border-radius: 50px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            width: 40%;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Fade in animation */
+        @keyframes fadeIn {
+        from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Apply the animation to your main content */
+        main {
+            animation: fadeIn 1s ease-in-out;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var conn;
+    
+        function initWebSocket() {
+        conn = new WebSocket('ws://192.168.137.192:81');
+    
+        conn.onopen = function() {
+            console.log('连接开启');
+        };
+    
+        conn.onmessage = function(e) {
+            console.log('收到消息: ' + e.data);
+            document.getElementById('dataContainer').innerText = e.data;
+        };
+    
+        conn.onerror = function(e) {
+            console.log('WebSocket错误: ' + e);
+        };
+    
+        conn.onclose = function() {
+            console.log('连接关闭，尝试重新连接');
+            setTimeout(initWebSocket, 2000);
+        };
+        }
+    
+        window.addEventListener('load', initWebSocket, false);
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Collision Detection</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="helmet.html">Home</a></li>
+            <li><a href="route.html">Route</a></li>
+            <li><a href="video.html">Video</a></li>
+            <li><a href="story.html">Our Story</a></li>
+            <li><a href="about.html">About Us</a></li>
+        </ul>
+    </nav>
+    <main>
+        <div class="bg-image"></div>
+
+        <div class="content">
+            <h1>Last Collision</h1>
+            <p id="dataContainer">Time of the last collision will be displayed here.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Helmet World. All rights reserved.</p>
+    </footer>
+</body>
+</html>

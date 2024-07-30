@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <title>Route</title>
+    <style>
+        body {
+            font-family: 'Lobster', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #feddf1;
+        }
+
+        header {
+            background-color: #3d2d9e;
+            background: url('/static/25.png') no-repeat center center;
+            font-size: 22px;
+            color: white;
+            padding: 1px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #3d2d9e;
+            font-size: 18px;
+        }
+
+        main {
+            padding: 15px;
+        }
+
+        footer {
+            position: fixed; /* Fixed position */
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            font-family: 'Lobster', cursive;
+            background-color: #665ca8;
+            color: #fcc3e5;
+            font-size: 18px;
+            text-align: center;
+            padding: 1px 5px;
+        }
+
+        button {
+            background-color: #cac3ef;
+            color: #3d2d9e;
+            font-family: 'Lobster', cursive;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #d3ceef;
+        }
+
+        #period {
+            padding: 10px;
+            border: 2px solid #3d2d9e;
+            background-color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #3d2d9e;
+            outline: none;
+            margin-left: 10px;
+        }
+
+        #period:hover {
+            border-color: #6495ED;
+        }
+
+        .center {
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            width: 470px;
+            height: 350px;
+        }
+
+        /* Fade in animation */
+        @keyframes fadeIn {
+        from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Apply the animation to your main content */
+        main {
+            animation: fadeIn 1s ease-in-out;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Video</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="helmet.html">Home</a></li>
+            <li><a href="route.html">Route</a></li>
+            <li><a href="collision.html">Collision Detection</a></li>
+            <li><a href="story.html">Our Story</a></li>
+            <li><a href="about.html">About Us</a></li>
+        </ul>
+    </nav>
+    <main>
+        <p>View the live stream: <button id="live_stream">Click here🔗</button></p>
+        <p>View the history (Select the video time you want to retrace from now from the drop-down list)</p>
+        <select id="period">
+            <option value="1">1 minute ago</option>
+            <option value="2">2 minutes ago</option>
+            <option value="5">5 minutes ago</option>
+            <option value="10">10 minutes ago</option>
+        </select>
+        
+        <button id="submit">Submit</button>
+        
+        <script>
+            $(document).ready(function() {
+                $('#live_stream').click(function() {
+                    $.ajax({
+                        url: '/get_live',
+                        type: 'GET',
+                        success: function(response) {
+                            if (response.open_live_tab) {
+                                window.open('http://192.168.43.118:81/stream', '_blank');
+                            }
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                });
+            });
+
+
+            $(document).ready(function() {
+                $('#submit').click(function() {
+                    var selectedOption = $('#period').val();
+                    $.ajax({
+                        url: '/video_history',
+                        type: 'POST',
+                        contentType: 'application/json',  
+                        data: JSON.stringify({period: selectedOption}),
+                        success: function(response) {
+                            // Update the video source
+                            $('#history_video').find('source').attr('src', response.video_url);
+                            // Reload the video element to update the source
+                            $('#history_video').get(0).load();
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                });
+            });
+        </script>
+
+        <video id="history_video" class='center' controls>
+            <source src="{{ video_url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Helmet World. All rights reserved.</p>
+    </footer>
+</body>
+</html>

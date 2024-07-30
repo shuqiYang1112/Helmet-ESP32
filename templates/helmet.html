@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <title>Helmet</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Lobster', cursive;
+            font-size: 22px;
+            background-color: #dbd4ec;
+        }
+
+        /* Header styles */
+        .header {
+            background: #3f217b; /* Dark background for the header */
+            color: #fff; /* White text color */
+            padding: 13px 40px; /* Some padding around the content */
+            display: flex;
+            justify-content: space-between; /* Space out the logo and navigation */
+            align-items: center; /* Align items vertically */
+        }
+
+        .header .logo {
+            font-size: 24px; /* Larger font size for the logo */
+            font-weight: bold; /* Make the logo text bold */
+        }
+
+        .header-nav {
+            list-style: none;
+            display: flex;
+            gap: 10px; /* Space out the navigation items */
+        }
+
+        .header-nav a {
+            text-decoration: none;
+            color: #fcc3e5; /* White text color for the links */
+            padding: 5px 15px; /* Padding for clickable area */
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effect */
+        }
+
+        .header-nav a:hover {
+            background-color: #a69de1; /* Background color on hover */
+            color: #ececec; /* Text color on hover */
+        }
+
+        .footer {
+            background-color: #fcc3e5; /* Footer background */
+            color: #3d2d9e; /* Footer text color */
+            font-size: 18px;
+            padding: 1px 5px; /* Footer padding */
+            text-align: center; /* Center the text in the footer */
+            position: fixed; /* Fix the footer at the bottom */
+            bottom: 0; /* Position it at the very bottom */
+            left: 0; /* Align it to the left */
+            width: 100%; /* Full width */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+        
+        /* Split container styles */
+        .split-container {
+            display: flex;
+            height: 100%;
+        }
+
+        .left-side {
+            width: 50%;
+            background: url('/static/24.png') no-repeat center center;
+            background-size: cover;
+            border-top-right-radius: 150px;  /* Creates a rounded border on the top-left edge */
+            border-bottom-right-radius: 150px; /* Creates a rounded border on the bottom-left edge */
+            box-shadow: 5px 0 10px rgba(0, 0, 0, 0.5); /* Adjusts shadow for depth */
+        }
+        
+        
+        .right-side {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch; /* Align children to stretch full width */
+            justify-content: space-between; /* Space between header, content, and footer */
+            text-align: center;
+            background: url('/static/22.png') no-repeat center center;
+            background-color: #ececec;
+            background-size: cover;
+            /* border-top-right-radius: 150px;  Creates a rounded border on the top-right edge */
+            /* border-bottom-right-radius: 150px;  Creates a rounded border on the bottom-right edge */
+            /* box-shadow: 5px 0 10px rgba(0, 0, 0, 0.5);  Adds shadow for depth */
+        }
+
+        .right-side-content {
+            flex: 1; /* Take up remaining space */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-top: 150px; /* Adjust if needed */
+        }
+
+        .navigation {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            position: absolute; /* Position the navigation absolutely within the right side */
+            top: 50%; /* Center vertically */
+            left: 50%; /* Start at the middle of the right side (which is the boundary) */
+            transform: translate(0%, -30%); /* Adjust horizontally to the boundary and center vertically */
+            width: auto; /* Let the width be as wide as the content requires */
+        }
+        
+        .navigation li {
+            background-color: #a48def; /* Background color of the buttons */
+            margin: 13px 0; /* Space between buttons */
+            padding: 3px 5px; /* Padding inside the buttons */
+            border-radius: 0 50px 50px 0; /* Rounded corners on the right side */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+            position: relative; /* For tooltip positioning */
+            white-space: nowrap; /* Ensure the text doesn't wrap */
+        }
+        
+        .navigation a {
+            display: block; /* Make the link fill the li element */
+            font-size: 20px;
+            color: white; /* Text color */
+            text-decoration: none; /* Remove underline */
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effect */
+        }
+        
+        .navigation li:hover {
+            background-color: #5b4baf; /* Lighten the background on hover */
+        }
+
+
+        .tooltip {
+            visibility: hidden;
+            background-color: #fff;
+            color: #555;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 8px;
+            position: absolute;
+            z-index: 1;
+            top: 50%;
+            left: 100%; /* Position the tooltip to the right of the button */
+            transform: translateY(-50%); /* Center it vertically with the button */
+            white-space: nowrap; /* Ensure the text does not wrap */
+            opacity: 0;
+            transition: opacity 0.3s;
+            margin-left: 5px; /* Small space between the button and tooltip */
+        }
+        
+        /* Tooltip arrow */
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: -5px; /* Position arrow on the left edge of the tooltip */
+            margin-top: -5px; /* Center the arrow with the tooltip */
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent transparent #555;
+        }
+        
+        /* Show the tooltip text when you mouse over the tooltip container */
+        .navigation li:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Adjust the padding for the arrow and the text */
+        .navigation a {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 10px 20px; /* Padding for the button */
+        }
+        
+        .arrow {
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .navigation a:hover .arrow {
+            transform: translateX(5px);
+        }
+        
+
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Heaven Met Helmet</div>
+        <ul class="header-nav">
+            <li><a href="route.html">Route</a></li>
+            <li><a href="video.html">Video</a></li>
+            <li><a href="collision.html">Collision</a></li>
+            <li><a href="story.html">Our Story</a></li>
+            <li><a href="about.html">About Us</a></li>
+        </ul>
+    </header>
+    <div class="split-container">
+        <div class="left-side">
+            <!-- Left side content, possibly an image or slideshow -->
+        </div>
+        <div class="right-side">
+            <div class="right-side-content">
+
+                <ul class="navigation">
+                    <li class="nav-item">
+                        <a href="route.html">
+                            <span class="arrow">&#10140;</span>Route
+                            <span class="tooltip">Routes: Memory on Specific Date</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="video-link">
+                        <a href="video.html">
+                            <span class="arrow">&#10140;</span>Video
+                            <span class="tooltip">Videos: What You See on That Day</span>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a href="collision.html">
+                            <span class="arrow">&#10140;</span>Collision detection
+                            <span class="tooltip">POPs: Collision Detection</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="story.html">
+                            <span class="arrow">&#10140;</span>Our Story
+                            <span class="tooltip"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="about.html">
+                            <span class="arrow">&#10140;</span>About Us
+                            <span class="tooltip"> </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer">
+            <p>&copy; 2023 Heaven Met Helmet. All rights reserved.</p>
+        </div>
+    </div>
+
+</body>
+</html>

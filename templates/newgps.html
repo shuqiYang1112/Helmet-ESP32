@@ -1,0 +1,101 @@
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Google Maps - gmplot</title>
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8HpKyCbLR5IHcdG_NtjbBcCoapwAN9ME&callback=console.debug&libraries=maps,marker&v=beta"></script>
+<script type="text/javascript">
+    function initialize() {
+        var map = new google.maps.Map(document.getElementById("map_canvas"), {
+        zoom: 20,center: 
+        new google.maps.LatLng(43.659594, -79.396294)});
+        new google.maps.Polyline({clickable: false,geodesic: true,strokeColor: "#6495ED",strokeOpacity: 1.000000,strokeWeight: 2,map: map,path: [
+            new google.maps.LatLng(43.659594,-79.396294),
+            new google.maps.LatLng(43.659601,-79.396328),
+            new google.maps.LatLng(43.659593,-79.396411),
+            new google.maps.LatLng(43.659577,-79.396434),
+            new google.maps.LatLng(43.659564,-79.396492),
+            new google.maps.LatLng(43.659561,-79.396498),new google.maps.LatLng(43.659552,-79.396372),new google.maps.LatLng(43.659552,-79.396327),new google.maps.LatLng(43.659568,-79.396418),new google.maps.LatLng(43.659576,-79.396415),new google.maps.LatLng(43.659579,-79.396425),new google.maps.LatLng(43.659593,-79.396447),new google.maps.LatLng(43.659602,-79.396539),new google.maps.LatLng(43.659608,-79.396537),new google.maps.LatLng(43.659611,-79.396499),new google.maps.LatLng(43.659607,-79.396505),new google.maps.LatLng(43.659631,-79.396448),new google.maps.LatLng(43.659641,-79.396459),new google.maps.LatLng(43.659729,-79.39674),new google.maps.LatLng(43.65973,-79.396713),new google.maps.LatLng(43.659723,-79.396656),]});}</script>
+<script type="text/javascript">
+</script>
+<style>
+    body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e7e7e7;
+        }
+
+        header {
+            background-color: #3d2d9e;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #3d2d9e;
+        }
+
+        main {
+            padding: 15px;
+        }
+
+        footer {
+            position: fixed; /* Fixed position */
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #3d2d9e;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        /* Fade in animation */
+        @keyframes fadeIn {
+        from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Apply the animation to your main content */
+        main {
+            animation: fadeIn 1s ease-in-out;
+        }
+</style>
+</head>
+<body style="margin:0px; padding:0px;" onload="initialize()">
+    <header>
+        <h1>Route</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="helmet.html">Home</a></li>
+            <li><a href="video.html">Video</a></li>
+            <li><a href="collision.html">Collision Detection</a></li>
+            <li><a href="story.html">Our Story</a></li>
+            <li><a href="about.html">About Us</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+    <div id="map_canvas" style="width: 95%; height: 69%; margin: auto;" />
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Helmet World. All rights reserved.</p>
+    </footer>
+</body>
+</html>
